@@ -44,6 +44,6 @@ def createDB():
           sql = 'INSERT INTO RAIDS (minILVL, maxILVL, Activity, Raid, Repetitions) values(?, ?, ?, ?, ?)'
           connect.executemany(sql, raidData)
 
-#createDB()
+createDB()
 
 

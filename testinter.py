@@ -1,5 +1,5 @@
 import customtkinter
-import tkinter
+import tkinter as tk
 from test import classDict
 import sqlite3 as sl
 
@@ -7,6 +7,8 @@ connect = sl.connect('testbase.db')
 
 app = customtkinter.CTk()
 app.geometry("800x800")
+
+
 
 def class_dropdown_callback(choice):
     subclassDropdown.configure(values = classDict[choice])
