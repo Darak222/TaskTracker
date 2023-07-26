@@ -1,14 +1,13 @@
 import customtkinter
 import tkinter as tk
-from test import classDict
 import sqlite3 as sl
+from ClassList import classDict
 
 
 
 class CreateCharacterFrame(customtkinter.CTkFrame):
     def __init__(self, *args, header_name="Create Character", **kwargs):
         super().__init__(*args, **kwargs)
-        from test import classDict
 
         self.connect = sl.connect('testbase.db')
 
@@ -29,7 +28,6 @@ class CreateCharacterFrame(customtkinter.CTkFrame):
 
         self.getCharactername = customtkinter.CTkTextbox(self, height=1, width = 150, border_spacing = 1)
         self.getCharactername.insert("0.0", "Character name")
-        #characterName = getCharactername.get("0.0", "end")
         self.getCharactername.pack(padx = 20, pady = 2)
 
         self.classTextbox = customtkinter.CTkTextbox(self, height=1, width = 200, fg_color = "transparent", border_spacing = 1)
@@ -50,9 +48,6 @@ class CreateCharacterFrame(customtkinter.CTkFrame):
         self.subclassDropdown.pack(padx = 20, pady = 20)
         self.subclassDropdown.set("Select subclass")
 
-        #itemlevelButton = customtkinter.CTkButton(self, text = "Insert Item Level", command = input_itemlevel)
-        #itemlevelButton.pack(padx = 20, pady = 20)
-
         self.itemlevelTextbox = customtkinter.CTkTextbox(self, height=1, width = 200, fg_color = "transparent", border_spacing = 1)
         self.itemlevelTextbox.insert("0.0", "Insert character item level")
         self.itemlevelTextbox.configure(state = "disabled")
@@ -60,7 +55,6 @@ class CreateCharacterFrame(customtkinter.CTkFrame):
 
         self.getItemlevel = customtkinter.CTkTextbox(self, height=1, width = 150, border_spacing = 1)
         self.getItemlevel.insert("0.0", "Insert item level")
-        #characterItemlevel = getItemlevel.get("0.0", "end")
         self.getItemlevel.pack(padx = 20, pady = 2)
 
         self.submitButton = customtkinter.CTkButton(master = self, text = "Submit Character", command = self.submit_character)
@@ -135,16 +129,5 @@ class CreateCharacterFrame(customtkinter.CTkFrame):
         self.getItemlevel.delete("0.0", "end")
         self.getItemlevel.insert("0.0", "Insert item level")
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
 
-        self.geometry("800x800")
-        self.title("Test")
-
-        self.create_character_frame = CreateCharacterFrame(self, header_name = "Create Character 1")
-        self.create_character_frame.grid(row = 1, column = 0, padx = 20, pady = 20)
-
-app = App()
-app.mainloop()
 

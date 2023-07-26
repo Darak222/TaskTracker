@@ -1,6 +1,6 @@
 classDict = {"Warrior": ["Berserker", "Paladin", "Gunlancer"], "Gunner": ["Artillerist", "Machinist"], "Mage": ["Sorceress", "Bard", "Arcana"]}
 
-class Character:
+"""class Character:
     def __init__(self, characterName, mainClass, subClass, itemLevel):
         self.characterName = characterName
         self.mainClass = mainClass
@@ -18,7 +18,7 @@ class Character:
     
     def getItemLevel(self):
         return str(self.itemLevel)
-
+"""
 
 """def createCharacter():
     characterCreated = False
