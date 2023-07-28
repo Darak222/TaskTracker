@@ -26,6 +26,17 @@ def createDB():
         )
       """)
 
+      connect.execute("""
+        CREATE TABLE if not exists DAILY (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          MinILVL int,
+          MaxILVL int,
+          ActivityName TEXT,
+          Repetitions int
+        )
+      """)
+
+
       checkEmpty = connect.execute("""SELECT count(*) from RAIDS""")
       checkEmpty = checkEmpty.fetchone()[0]
       if checkEmpty == 0:
@@ -41,8 +52,22 @@ def createDB():
               (1520, 9999, 'Legion Raid', 'Brelshaza 5-6', 2),
               (1540, 9999, 'Abyssal Dungeon', 'Kayangel', 4)
           ]
-          sql = 'INSERT INTO RAIDS (minILVL, maxILVL, Activity, Raid, Repetitions) values(?, ?, ?, ?, ?)'
+          sql = 'INSERT INTO RAIDS (MinILVL, MaxILVL, Activity, Raid, Repetitions) values(?, ?, ?, ?, ?)'
           connect.executemany(sql, raidData)
+      
+      checkEmpty = connect.execute("""SELECT count(*) from DAILY""")
+      checkEmpty = checkEmpty.fetchone()[0]
+      if checkEmpty == 0:
+          dailyData = [
+            (302, 9999, 'Chaos Dungeon', 2),
+            (302, 9999, 'Guardian Raid', 2),
+            (302, 9999, 'Una Task', 3),
+            (302, 9999, 'Guild Support', 1)
+          ]
+          sql = 'INSERT INTO DAILY (MinILVL, MaxILVL, ActivityName, Repetitions) values(?, ?, ?, ?)'
+          connect.executemany(sql, dailyData)
+    
+
 
 #createDB()
 
