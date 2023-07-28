@@ -42,6 +42,7 @@ class App(customtkinter.CTk):
 
         self.select_mainframe = TaskListFrame(self, header_name = "Task List 1")
         self.select_mainframe.grid(row = 1, column = 0, padx = 20, pady = 20)
+        
 
     def TaskListSelected(self):
         self.select_mainframe.destroy()

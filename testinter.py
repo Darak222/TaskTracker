@@ -1,12 +1,17 @@
 import customtkinter
 import tkinter as tk
-from test import classDict
+from ClassList import classDict
 import sqlite3 as sl
 
 connect = sl.connect('testbase.db')
 
 app = customtkinter.CTk()
 app.geometry("800x800")
+
+app.grid_rowconfigure(0, weight = 0)
+app.grid_columnconfigure(0, weight = 1)
+
+app.grid_rowconfigure(1, weight = 0)
 
 
 
@@ -32,6 +37,9 @@ def submit_character():
         errorTextbox.configure(state = "normal")
         errorTextbox.delete("0.0", "end")
         errorTextbox.insert("0.0", "Character name length must be greater than 2")
+        errorTextbox.tag_config("center", justify='center')
+        errorTextbox.insert(1.0, " ")
+        errorTextbox.tag_add("center", "1.0", "end")
         errorTextbox.configure(state = "disabled")
         return 0
     
@@ -40,6 +48,7 @@ def submit_character():
         errorTextbox.delete("0.0", "end")
         errorTextbox.insert("0.0", "Please select your subclass!")
         errorTextbox.configure(state = "disabled")
+        print(characterName)
         return 0
     
     characterItemLevel = getItemlevel.get("0.0", "end")
@@ -86,51 +95,52 @@ subclassChosen = customtkinter.StringVar(value = classDict[keys[0]][0])
 
 errorTextbox = customtkinter.CTkTextbox(app, height = 1, width = 400, fg_color = "transparent", border_spacing = 1)
 errorTextbox.insert("0.0", "")
+errorTextbox.tag_config("center", justify='center')
+errorTextbox.insert(1.0, " ")
+errorTextbox.tag_add("center", "1.0", "end")
 errorTextbox.configure(state = "disabled")
-errorTextbox.pack(padx = 20, pady = 2)
+errorTextbox.grid(row = 0, column = 0, padx = 20, pady = 2)
 
 characternameTextbox = customtkinter.CTkTextbox(app, height = 1, width = 200, fg_color = "transparent", border_spacing = 1)
 characternameTextbox.insert("0.0", "Insert character name")
+characternameTextbox.tag_config("center", justify='center')
+characternameTextbox.insert(1.0, " ")
+characternameTextbox.tag_add("center", "1.0", "end")
 characternameTextbox.configure(state = "disabled")
-characternameTextbox.pack(padx = 20, pady = 2)
+characternameTextbox.grid(row = 1, column = 0, padx = 20, pady = 2)
 
 getCharactername = customtkinter.CTkTextbox(app, height=1, width = 150, border_spacing = 1)
 getCharactername.insert("0.0", "Character name")
-#characterName = getCharactername.get("0.0", "end")
-getCharactername.pack(padx = 20, pady = 2)
+getCharactername.grid(row = 2, column = 0, padx = 20, pady = 2)
 
 classTextbox = customtkinter.CTkTextbox(app, height=1, width = 200, fg_color = "transparent", border_spacing = 1)
 classTextbox.insert("0.0", "Select main class")
 classTextbox.configure(state = "disabled")
-classTextbox.pack(padx = 20, pady = 2)
+classTextbox.grid(row = 3, column = 0, padx = 20, pady = 2)
 
 classDropdown = customtkinter.CTkComboBox(master = app, values = keys, command = class_dropdown_callback, variable = classChosen)
-classDropdown.pack(padx = 20, pady = 20)
+classDropdown.grid(row = 4, column = 0, padx = 20, pady = 2)
 classDropdown.set(keys[0])
 
 subclassTextbox = customtkinter.CTkTextbox(app, height=1, width = 200, fg_color = "transparent")
 subclassTextbox.insert("0.0", "Select your subclass")
 subclassTextbox.configure(state = "disabled")
-subclassTextbox.pack(padx = 20, pady = 2)
+subclassTextbox.grid(row = 5, column = 0, padx = 20, pady = 2)
 
 subclassDropdown = customtkinter.CTkComboBox(master = app, values = classDict[classChosen.get()], variable = subclassChosen)
-subclassDropdown.pack(padx = 20, pady = 20)
+subclassDropdown.grid(row = 6, column = 0, padx = 20, pady = 2)
 subclassDropdown.set("Select subclass")
-
-#itemlevelButton = customtkinter.CTkButton(app, text = "Insert Item Level", command = input_itemlevel)
-#itemlevelButton.pack(padx = 20, pady = 20)
 
 itemlevelTextbox = customtkinter.CTkTextbox(app, height=1, width = 200, fg_color = "transparent", border_spacing = 1)
 itemlevelTextbox.insert("0.0", "Insert character item level")
 itemlevelTextbox.configure(state = "disabled")
-itemlevelTextbox.pack(padx = 20, pady = 2)
+itemlevelTextbox.grid(row = 7, column = 0, padx = 20, pady = 2)
 
 getItemlevel = customtkinter.CTkTextbox(app, height=1, width = 150, border_spacing = 1)
 getItemlevel.insert("0.0", "Insert item level")
-#characterItemlevel = getItemlevel.get("0.0", "end")
-getItemlevel.pack(padx = 20, pady = 2)
+getItemlevel.grid(row = 8, column = 0, padx = 20, pady = 2)
 
 submitButton = customtkinter.CTkButton(master = app, text = "Submit Character", command = submit_character)
-submitButton.pack(padx = 20, pady = 20)
+submitButton.grid(row = 9, column = 0, padx = 20, pady = 2)
 
 app.mainloop()

@@ -1,4 +1,9 @@
-classDict = {"Warrior": ["Berserker", "Paladin", "Gunlancer"], "Gunner": ["Artillerist", "Machinist"], "Mage": ["Sorceress", "Bard", "Arcana"]}
+classDict = {"Warrior": ["Berserker", "Paladin", "Gunlancer", "Destroyer", "Slayer"],
+              "Gunner": ["Artillerist", "Machinist", "Gunslinger", "Deadeye", "Sharpshooter"],
+                "Mage": ["Sorceress", "Bard", "Arcana", "Summoner"],
+             "Assasin": ["Shadowhunter", "Reaper", "Deathblade", "Souleater"],
+            "Martial Artist": ["Scrapper", "Soulfist", "Wardancer", "Striker", "Glaivier"],
+            "Specialist": ["Artist", "Aeromancer"]}
 
 """class Character:
     def __init__(self, characterName, mainClass, subClass, itemLevel):
