@@ -36,6 +36,21 @@ def createDB():
         )
       """)
 
+      #connect.execute("DROP TABLE DAILYTASKS")
+
+      connect.execute("""CREATE TABLE if not exists DAILYTASKS (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          Character TEXT,
+          ActivityName TEXT,
+          Repetitions INT
+      )""")
+
+      connect.execute("""CREATE TABLE if not exists WEEKLYTASKS (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          Character TEXT,
+          ActivityName TEXT,
+          Repetitions INT
+      )""")
 
       checkEmpty = connect.execute("""SELECT count(*) from RAIDS""")
       checkEmpty = checkEmpty.fetchone()[0]
@@ -66,9 +81,97 @@ def createDB():
           ]
           sql = 'INSERT INTO DAILY (MinILVL, MaxILVL, ActivityName, Repetitions) values(?, ?, ?, ?)'
           connect.executemany(sql, dailyData)
-    
 
+def startupDBCheck():
+    with connect:
+        checkEmptyDaily = connect.execute("SELECT count(*) from DAILYTASKS")
+        checkEmptyDaily = checkEmptyDaily.fetchone()[0]
+        
+        if checkEmptyDaily == 0:
+            updateEmptyDaily()
 
+        checkCharacters = connect.execute("SELECT Character from CHARACTERS")
+        for characterToCheck in checkCharacters:
+            characterDailyTasks = connect.execute("SELECT count(*) FROM DAILYTASKS WHERE Character = ?", (characterToCheck))
+            characterDailyTasks = characterDailyTasks.fetchone()[0]
+            if characterDailyTasks == 0:
+                addSingleCharacterDaily(characterToCheck)
+            if characterDailyTasks > 0 and characterDailyTasks < 4:
+                checkMissingData(characterToCheck)
+                print("Incomplete list")
+        print("Checked")
+
+def addSingleCharacterDaily(characterName):
+    with connect:
+        getCharacterILevel = connect.execute("Select ItemLevel FROM CHARACTERS WHERE Character = ?", (characterName[0],))
+        getCharacterILevel = getCharacterILevel.fetchone()[0]
+        getDaily = connect.execute("SELECT ActivityName, MinILVL, Repetitions FROM DAILY")
+        for daily in getDaily:
+          if getCharacterILevel >= daily[1]:
+              connect.execute("INSERT INTO DAILYTASKS (Character, ActivityName, Repetitions) VALUES (?, ?, ?)", (characterName[0], daily[0], daily[2],))
+
+def checkMissingData(characterName):
+    with connect:
+        checkMissing = connect.execute("SELECT ActivityName, Repetitions, MinILVL from DAILY")
+        getCharacterILevel = connect.execute("Select ItemLevel FROM CHARACTERS WHERE Character = ?", (characterName[0],))
+        getCharacterILevel = getCharacterILevel.fetchone()[0]
+        for missing in checkMissing:
+            missingActivity = connect.execute("SELECT count(*) from DAILYTASKS WHERE ActivityName = ? AND Character = ?", (missing[0], characterName[0]))
+            missingActivity = missingActivity.fetchone()[0]
+            if missingActivity == 0 and (getCharacterILevel >= missing[2]):
+                connect.execute("INSERT INTO DAILYTASKS (Character, ActivityName, Repetitions) VALUES (?, ?, ?)", (characterName[0], missing[0], missing[1]))
+
+def updateEmptyDaily():
+    with connect:
+        getCharacters = connect.execute("SELECT Character, ItemLevel FROM CHARACTERS")
+        for character in getCharacters:
+            checkDuplicate = connect.execute("SELECT count(*) from DAILYTASKS WHERE Character = ?", (character[0],))
+            checkDuplicate = checkDuplicate.fetchone()[0]
+            getDaily = connect.execute("SELECT ActivityName, MinILVL, Repetitions FROM DAILY")
+            for daily in getDaily:
+                if character[1] >= daily[1]:
+                    if checkDuplicate == 0:
+                        connect.execute("INSERT INTO DAILYTASKS (Character, ActivityName, Repetitions) VALUES (?, ?, ?)", (character[0], daily[0], daily[2],))
+
+"""def printCharacter():
+    with connect:
+        characterNames = connect.execute("Select Character from CHARACTERS")
+        namesList = []
+        for characterName in characterNames:
+            namesList.append(characterName)
+        print(namesList)
+        characterName = "darak"
+        getName = connect.execute("Select * from CHARACTERS where Character = ?", (characterName,))
+        for i in getName:
+            print(i)
+"""
+def checkCharacters():
+    with connect:
+        getNames = connect.execute("SELECT * from CHARACTERS")
+        for name in getNames:
+            print(name)
+
+def checkDailies():
+    with connect:
+        getDailies = connect.execute("SELECT * FROM DAILYTASKS")
+        for daily in getDailies:
+            print(daily)
+
+def addTestCharacter():
+    with connect:
+        sql = "INSERT INTO DAILYTASKS (Character, ActivityName, Repetitions) VALUES (?, ?, ?)"
+        data = [("Dakuryon", "Guardian Raid", 2)]
+        connect.executemany(sql, data)
+
+def removeTestCharacter():
+    with connect:
+        connect.execute("DELETE FROM DAILYTASKS WHERE Character = 'Dakuryon'")
+
+#checkMissingData(("Rrogash",))
+#checkCharacters()  
+#checkDailies()
+#printCharacter()
 #createDB()
 
-
+#removeTestCharacter()
+#addTestCharacter()

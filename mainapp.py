@@ -2,7 +2,7 @@ import customtkinter
 import tkinter as tk
 import sqlite3 as sl
 from CreateCharacter import CreateCharacterFrame
-from CreateDB import createDB
+from CreateDB import createDB, startupDBCheck
 from TaskList import TaskListFrame
 from CharacterList import CharacterListFrame
 from AddNewTask import AddNewTaskFrame
@@ -13,6 +13,7 @@ class App(customtkinter.CTk):
         super().__init__()
 
         createDB()
+        startupDBCheck()
 
         self.geometry("1000x1000")
         self.title("Task Tracker")
